@@ -4,3 +4,7 @@ version = "0.1.0"
 authors = ["Satya Bodduluri <skbodduluri@gmail.com>"]
 
 [dependencies]
+docopt = "0.6"
+rustc-serialize = "0.3"
+hyper = "0.8.0"
+time = "0.1"
