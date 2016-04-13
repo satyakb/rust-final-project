@@ -1,0 +1,6 @@
+[package]
+name = "rust-final-project"
+version = "0.1.0"
+authors = ["Satya Bodduluri <skbodduluri@gmail.com>"]
+
+[dependencies]
