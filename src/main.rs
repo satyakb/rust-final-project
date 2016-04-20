@@ -18,9 +18,10 @@ use swarm::{Config, Stats};
 #[derive(Debug, RustcDecodable)]
 /// Stores commandline arguments
 struct Args {
-    flag_num: i64,
     flag_port: i64,
-    arg_HOST: Option<String>,
+    flag_num: i64,
+    arg_cfg: Option<String>,
+    arg_host: Option<String>,
     cmd_unleash: bool,
     cmd_master: bool,
     cmd_slave: bool,
@@ -31,35 +32,33 @@ fn main() {
     let args: Args = Docopt::new(USAGE)
                             .and_then(|d| d.version(Some(VERSION.to_string())).decode())
                             .unwrap_or_else(|e| e.exit());
-    println!("{:?}", args);
 
     if args.cmd_slave {
         slave::start(args.flag_port);
     } else {
-        let host = args.arg_HOST.unwrap();
-        let num = args.flag_num;
 
-        if num < 1 {
-            println!("Error: please choose a number greater than 0");
-            return
-        }
-
-        let config = Config {
-            num: num,
-            host: host,
-        };
-
-        let mut stat = Stats {
-            mean: 0.0,
-            min: 0,
-            max: 0,
-            failed: 0.0,
-        };
+        let mut stat : Stats = Default::default();
 
         if args.cmd_master {
-            stat = master::start(config);
+            let config_file = args.arg_cfg.unwrap();
+            stat = master::start(config_file);
+
         } else {
+
+            let host = args.arg_host.unwrap();
+            let num = args.flag_num;
+
+            if num < 1 {
+                println!("Error: please choose a number greater than 0");
+                return
+            }
+
+            let config = Config {
+                num: num,
+                host: host,
+            };
             stat = slave::unleash(config);
+
         }
 
         println!("{:?}", stat);

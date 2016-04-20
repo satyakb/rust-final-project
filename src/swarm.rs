@@ -32,6 +32,17 @@ pub struct Stats {
     pub failed: f64,
 }
 
+impl Default for Stats {
+    fn default() -> Stats {
+            Stats {
+            mean: 0.0,
+            min: i64::max_value(),
+            max: i64::min_value(),
+            failed: 0.0,
+        }
+    }
+}
+
 #[derive(Debug)]
 /// Keeps track of necessary parameters for the load testing
 pub struct Swarm {

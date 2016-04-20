@@ -6,7 +6,6 @@ use hyper::server::request::Request;
 use hyper::status::StatusCode;
 use rustc_serialize::json;
 
-use constants::SLAVE_ADDR;
 use swarm::{Config, Stats, Swarm};
 
 /// Returns val from Ok(val) or sets the response to return an InternalServerError.
@@ -32,7 +31,6 @@ fn req_handler(mut req: Request, mut res: Response) {
 
             // Make sure request is a Config
             let config : Config = try_or_server_err!(json::decode(&buf), res);
-            println!("{:?}", config);
 
             // Unleash the swarm
             let stats = unleash(config);
@@ -48,7 +46,7 @@ fn req_handler(mut req: Request, mut res: Response) {
 
 /// Starts http server listening for requests from the master
 pub fn start(port: i64) {
-    let addr = format!("127.0.0.1:{}", port);
+    let addr = format!("0.0.0.0:{}", port);
     println!("Listening on {}.", addr);
     match Server::http(addr.as_str()) {
         Ok(server) => {
@@ -65,7 +63,7 @@ pub fn start(port: i64) {
 pub fn unleash(config: Config) -> Stats {
     let mut swarm = Swarm::new(config.num, &config.host);
     println!("{:?}", swarm);
-    println!("{:?}", swarm.unleash());
+    swarm.unleash();
     println!("{:?}", swarm.stats());
 
     swarm.stats()

@@ -6,14 +6,15 @@ pub const USAGE: &'static str = "
 Swarm.
 
 Usage:
-  swarm (unleash | master) [--num=<n>] HOST
-  swarm slave [--port=<p>]
+  swarm unleash [-n <num>] <host>
+  swarm master <cfg>
+  swarm slave [-p <port>]
   swarm (-h | --help)
   swarm (-v | --version)
 
 Options:
-  --num=<n>      Number of requests [default: 10].
-  --port=<p>      Number of requests [default: 3000].
-  -h, --help     Show this screen.
-  -V, --version  Show version.
+  -n, --num <num>       Number of requests [default: 10].
+  -p, --port <port>     Number of requests [default: 3000].
+  -h, --help            Show this screen.
+  -V, --version         Show version.
 ";
