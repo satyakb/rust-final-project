@@ -1,5 +1,3 @@
-pub const SLAVE_ADDR: &'static str = "127.0.0.1:3001";
-
 pub const VERSION: &'static str = "1.0";
 
 pub const USAGE: &'static str = "
