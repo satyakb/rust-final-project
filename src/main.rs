@@ -2,6 +2,7 @@ extern crate rustc_serialize;
 extern crate docopt;
 extern crate hyper;
 extern crate time;
+extern crate yaml_rust;
 
 use docopt::Docopt;
 
@@ -12,12 +13,13 @@ pub mod swarm;
 mod slave;
 
 use constants::{USAGE, VERSION};
-use swarm::{Config};
+use swarm::{Config, Stats};
 
 #[derive(Debug, RustcDecodable)]
 /// Stores commandline arguments
 struct Args {
     flag_num: i64,
+    flag_port: i64,
     arg_HOST: Option<String>,
     cmd_unleash: bool,
     cmd_master: bool,
@@ -32,7 +34,7 @@ fn main() {
     println!("{:?}", args);
 
     if args.cmd_slave {
-        slave::start();
+        slave::start(args.flag_port);
     } else {
         let host = args.arg_HOST.unwrap();
         let num = args.flag_num;
@@ -42,10 +44,24 @@ fn main() {
             return
         }
 
+        let config = Config {
+            num: num,
+            host: host,
+        };
+
+        let mut stat = Stats {
+            mean: 0.0,
+            min: 0,
+            max: 0,
+            failed: 0.0,
+        };
+
         if args.cmd_master {
-            unimplemented!();
+            stat = master::start(config);
         } else {
-            slave::unleash(Config {num: num, host: host});
+            stat = slave::unleash(config);
         }
+
+        println!("{:?}", stat);
     }
 }

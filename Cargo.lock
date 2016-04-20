@@ -6,6 +6,7 @@ dependencies = [
  "hyper 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "rustc-serialize 0.3.19 (registry+https://github.com/rust-lang/crates.io-index)",
  "time 0.1.35 (registry+https://github.com/rust-lang/crates.io-index)",
+ "yaml-rust 0.3.2 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -356,5 +357,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 [[package]]
 name = "winapi-build"
 version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "yaml-rust"
+version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 

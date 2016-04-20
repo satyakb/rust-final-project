@@ -1,4 +1,5 @@
 use std::io::Read;
+
 use hyper::{self, Server};
 use hyper::server::Response;
 use hyper::server::request::Request;
@@ -20,6 +21,7 @@ macro_rules! try_or_server_err {
     })
 }
 
+/// Handles request from master and unleashes swarm
 fn req_handler(mut req: Request, mut res: Response) {
     match req.method {
         hyper::Post => {
@@ -32,9 +34,11 @@ fn req_handler(mut req: Request, mut res: Response) {
             let config : Config = try_or_server_err!(json::decode(&buf), res);
             println!("{:?}", config);
 
+            // Unleash the swarm
             let stats = unleash(config);
             let stats_string = try_or_server_err!(json::encode(&stats), res);
 
+            // Send back OK and the stats
             *res.status_mut() = StatusCode::Ok;
             res.send(&stats_string.as_bytes()).unwrap();
         },
@@ -42,18 +46,22 @@ fn req_handler(mut req: Request, mut res: Response) {
     }
 }
 
-pub fn start() {
-    println!("Listening on {}.", SLAVE_ADDR);
-    match Server::http(SLAVE_ADDR) {
-        Ok(server) => match server.handle(req_handler) {
-            Ok(_) => (),
-            Err(e) => println!("{:?}", e),
+/// Starts http server listening for requests from the master
+pub fn start(port: i64) {
+    let addr = format!("127.0.0.1:{}", port);
+    println!("Listening on {}.", addr);
+    match Server::http(addr.as_str()) {
+        Ok(server) => {
+            match server.handle(req_handler) {
+                Ok(_) => (),
+                Err(e) => println!("{:?}", e),
+            }
         },
         Err(e) => println!("{:?}", e),
     }
 }
 
-/// Unleashes the swarm from local computer
+/// Unleashes the swarm from local machine
 pub fn unleash(config: Config) -> Stats {
     let mut swarm = Swarm::new(config.num, &config.host);
     println!("{:?}", swarm);

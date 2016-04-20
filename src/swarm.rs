@@ -6,7 +6,7 @@ use time::Duration;
 
 #[derive(Debug, Clone)]
 #[derive(RustcDecodable, RustcEncodable)]
-/// Contains all the calculated metrics
+/// Swarm config
 pub struct Config {
     /// Number of threads to generate/requests to send
     pub num: i64,
@@ -20,16 +20,16 @@ pub struct Config {
 /// Contains all the calculated metrics
 pub struct Stats {
     /// Mean request time in milliseconds
-    mean: f64,
+    pub mean: f64,
 
     /// Min request time in milliseconds
-    min: i64,
+    pub min: i64,
 
     /// Max request time in milliseconds
-    max: i64,
+    pub max: i64,
 
     /// Percentage of failed requests
-    failed: f64,
+    pub failed: f64,
 }
 
 #[derive(Debug)]
@@ -85,13 +85,13 @@ impl Swarm {
     pub fn stats(&self) -> Stats {
         let mut sum = 0;
         let mut num_fail = 0;
-        let mut min_d = Duration::min_value();
-        let mut max_d = Duration::max_value();
+        let mut min_d = Duration::max_value();
+        let mut max_d = Duration::min_value();
         for member in &self.members {
             let duration = member.duration;
             sum += duration.num_milliseconds();
-            min_d = max(min_d, member.duration);
-            max_d = min(max_d, member.duration);
+            min_d = min(min_d, member.duration);
+            max_d = max(max_d, member.duration);
             if !member.success {
                 num_fail += 1;
             }
