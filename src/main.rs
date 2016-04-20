@@ -5,52 +5,47 @@ extern crate time;
 
 use docopt::Docopt;
 
-pub mod swarm;
+pub mod constants;
 pub mod member;
+pub mod master;
+pub mod swarm;
+mod slave;
 
-use swarm::Swarm;
-
-pub const VERSION: &'static str = "1.0";
-
-const USAGE: &'static str = "
-Swarm.
-
-Usage:
-  swarm [--num=<n>] HOST
-  swarm (-h | --help)
-  swarm (-v | --version)
-
-Options:
-  --num=<n>      Number of requests [default=10]
-  -h, --help     Show this screen.
-  -V, --version  Show version.
-";
+use constants::{USAGE, VERSION};
+use swarm::{Config};
 
 #[derive(Debug, RustcDecodable)]
 /// Stores commandline arguments
 struct Args {
     flag_num: i64,
     arg_HOST: Option<String>,
+    cmd_unleash: bool,
+    cmd_master: bool,
+    cmd_slave: bool,
 }
 
-/// Parses commandline arguments and unleashes the swarm
+/// Parses commandline arguments
 fn main() {
     let args: Args = Docopt::new(USAGE)
                             .and_then(|d| d.version(Some(VERSION.to_string())).decode())
                             .unwrap_or_else(|e| e.exit());
     println!("{:?}", args);
 
-    let host = args.arg_HOST.unwrap();
-    let num = args.flag_num;
+    if args.cmd_slave {
+        slave::start();
+    } else {
+        let host = args.arg_HOST.unwrap();
+        let num = args.flag_num;
 
-    if num < 1 {
-        println!("Error: please choose a number greater than 0");
-        return
+        if num < 1 {
+            println!("Error: please choose a number greater than 0");
+            return
+        }
+
+        if args.cmd_master {
+            unimplemented!();
+        } else {
+            slave::unleash(Config {num: num, host: host});
+        }
     }
-
-    let mut swarm = Swarm::new(num, &host);
-    println!("{:?}", swarm);
-    println!("{:?}", swarm.unleash());
-    println!("{:?}", swarm.stats());
-
 }

@@ -4,20 +4,19 @@ use std::cmp::{min, max};
 use member::Member;
 use time::Duration;
 
-#[derive(Debug)]
-/// Keeps track of necessary parameters for the load testing
-pub struct Swarm {
+#[derive(Debug, Clone)]
+#[derive(RustcDecodable, RustcEncodable)]
+/// Contains all the calculated metrics
+pub struct Config {
     /// Number of threads to generate/requests to send
-    count: i64,
+    pub num: i64,
 
-    /// Host to send the request to
-    host: String,
-
-    /// List of members
-    members: Vec<Member>,
+    /// Min request time in milliseconds
+    pub host: String,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
+#[derive(RustcDecodable, RustcEncodable)]
 /// Contains all the calculated metrics
 pub struct Stats {
     /// Mean request time in milliseconds
@@ -33,13 +32,25 @@ pub struct Stats {
     failed: f64,
 }
 
+#[derive(Debug)]
+/// Keeps track of necessary parameters for the load testing
+pub struct Swarm {
+    /// Config
+    config: Config,
+
+    /// List of members
+    members: Vec<Member>,
+}
+
 impl Swarm {
     /// Instantiates a new swarm with the given settings
-    pub fn new(count: i64, host: &str) -> Swarm {
+    pub fn new(num: i64, host: &str) -> Swarm {
         Swarm {
-            count: count,
-            host: host.to_string(),
-            members: Vec::with_capacity(count as usize),
+            config: Config {
+                num: num,
+                host: host.to_string(),
+            },
+            members: Vec::with_capacity(num as usize),
         }
     }
 
@@ -48,9 +59,9 @@ impl Swarm {
         let members = Arc::new(Mutex::new(Vec::new()));
         let mut threads = Vec::new();
 
-        for _ in 0..self.count {
+        for _ in 0..self.config.num {
             let members = members.clone();
-            let host = self.host.clone();
+            let host = self.config.host.clone();
 
             let thread = thread::spawn(move || {
                 let mut members = members.lock().unwrap();
@@ -87,10 +98,10 @@ impl Swarm {
         }
 
         Stats {
-            mean: sum as f64 / self.count as f64,
+            mean: sum as f64 / self.config.num as f64,
             min: min_d.num_milliseconds(),
             max: max_d.num_milliseconds(),
-            failed: 100.0 * num_fail as f64 / self.count as f64,
+            failed: 100.0 * num_fail as f64 / self.config.num as f64,
         }
     }
 }
