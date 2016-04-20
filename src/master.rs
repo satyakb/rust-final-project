@@ -12,9 +12,8 @@ use yaml_rust::YamlLoader;
 
 use swarm::{Config, Stats};
 
-/// Starts master
-/// Creates a thread per slave and sends command to the slave to unleash swarm
-/// Returns aggregated stats
+/// Starts master, creates a thread per slave, sends command to the slave to
+/// unleash swarm, returns aggregated stats
 pub fn start(config_file: String) -> Stats {
 
     // Read Yaml File
@@ -73,7 +72,7 @@ fn trigger_slave(url: &str, body: &str) -> Stats {
     // Create client
     let client = Client::new();
 
-    // Creating an outgoing request.
+    // Creates an outgoing request.
     let mut res = client.post(url)
         .body(body)
         .header(Connection::close())
