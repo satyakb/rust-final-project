@@ -45,8 +45,8 @@ fn req_handler(mut req: Request, mut res: Response) {
 }
 
 /// Starts http server listening for requests from the master
-pub fn start(port: i64) {
-    let addr = format!("0.0.0.0:{}", port);
+pub fn start(ip: &str, port: i64) {
+    let addr = format!("{}:{}", ip, port);
     println!("Listening on {}.", addr);
     match Server::http(addr.as_str()) {
         Ok(server) => {
@@ -63,7 +63,7 @@ pub fn start(port: i64) {
 pub fn unleash(config: Config) -> Stats {
     let mut swarm = Swarm::new(config.num, &config.host);
     println!("{:?}", swarm);
-    swarm.unleash();
+    swarm.unleash().unwrap();
     println!("{:?}", swarm.stats());
 
     swarm.stats()

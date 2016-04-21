@@ -91,6 +91,8 @@ fn aggregate_stats(stats: Vec<Stats>) -> Stats {
     let mut ret_stat : Stats = Default::default();
 
     for stat in &stats {
+        ret_stat.num += stat.num;
+        ret_stat.total += stat.total;
         ret_stat.mean += stat.mean;
         ret_stat.min = min(ret_stat.min, stat.min);
         ret_stat.max = max(ret_stat.max, stat.max);

@@ -3,7 +3,14 @@ extern crate docopt;
 extern crate hyper;
 extern crate time;
 extern crate yaml_rust;
+extern crate libc;
 
+extern {
+    fn get_ip_of_interface(iface: *const libc::c_char) -> *const libc::c_char;
+}
+
+use std::ffi::{CStr, CString};
+use std::str;
 use docopt::Docopt;
 
 pub mod constants;
@@ -18,13 +25,23 @@ use swarm::{Config, Stats};
 #[derive(Debug, RustcDecodable)]
 /// Stores commandline arguments
 struct Args {
-    flag_port: i64,
     flag_num: i64,
+    flag_port: i64,
+    flag_iface: Option<String>,
     arg_cfg: Option<String>,
     arg_host: Option<String>,
     cmd_unleash: bool,
     cmd_master: bool,
     cmd_slave: bool,
+}
+
+/// Naively gets default internet interface based on OS
+fn get_default_iface() -> String {
+    if std::env::consts::OS == "macos" {
+        return "en0".to_string();
+    }
+
+    return "eth0".to_string();
 }
 
 /// Parses commandline arguments
@@ -33,8 +50,19 @@ fn main() {
                             .and_then(|d| d.version(Some(VERSION.to_string())).decode())
                             .unwrap_or_else(|e| e.exit());
 
+
     if args.cmd_slave {
-        slave::start(args.flag_port);
+
+        let iface = args.flag_iface.unwrap_or_else(get_default_iface);
+
+        let iface = CString::new(iface.as_str()).unwrap();
+        let c_buf: *const libc::c_char = unsafe { get_ip_of_interface(iface.as_ptr()) };
+        let c_str: &CStr = unsafe { CStr::from_ptr(c_buf) };
+        let buf: &[u8] = c_str.to_bytes();
+        let ip: &str = str::from_utf8(buf).unwrap();
+
+        slave::start(ip, args.flag_port);
+
     } else {
 
         let mut stat : Stats = Default::default();
@@ -61,6 +89,6 @@ fn main() {
 
         }
 
-        println!("{:?}", stat);
+        stat.pretty_print();
     }
 }

@@ -19,6 +19,12 @@ pub struct Config {
 #[derive(RustcDecodable, RustcEncodable)]
 /// Contains all the calculated metrics
 pub struct Stats {
+    /// Number of requests sent
+    pub num: i64,
+
+    /// Total time taken for all requests in milliseconds
+    pub total: i64,
+
     /// Mean request time in milliseconds
     pub mean: f64,
 
@@ -32,9 +38,18 @@ pub struct Stats {
     pub failed: f64,
 }
 
+impl Stats {
+    pub fn pretty_print(&self) {
+        println!("{}\t{}\t{}\t{}\t{}\t{}", "N", "Total", "Mean", "Min", "Max", "%Failed");
+        println!("{}\t{}\t{}\t{}\t{}\t{}", self.num, self.total, self.mean, self.min, self.max, self.failed);
+    }
+}
+
 impl Default for Stats {
     fn default() -> Stats {
-            Stats {
+        Stats {
+            num: 0,
+            total: 0,
             mean: 0.0,
             min: i64::max_value(),
             max: i64::min_value(),
@@ -109,6 +124,8 @@ impl Swarm {
         }
 
         Stats {
+            num: self.config.num,
+            total: sum,
             mean: sum as f64 / self.config.num as f64,
             min: min_d.num_milliseconds(),
             max: max_d.num_milliseconds(),
