@@ -16,9 +16,13 @@ The structure of this project is heavily influenced by the goals I had set for m
 
 The main method would parse the options/arguments passed into the program and pass those to a ```Swarm```. The ```Swarm``` would use those arguments to initialize and start a swarm, which involved creating a ```Member``` per request. The job of the ```Member``` was to send the actual request to the intended Host/URL. After all the requests have been sent, the ```Swarm``` also has the job of aggregating all the timing data relevant to each request and developing relevant statistics for the user.
 
+![alt text](https://raw.githubusercontent.com/satyakb/swarm/master/swarm.png "Swarm")
+
 For the next week, I had the goal of transforming the non-distributed load tester into a distributed one. This involved fitting what I had into a master-slave architecture. The slaves would start a standard HTTP web server using ```Hyper``` and listen for requests from a master node. When a slave receives a request from the master node, it parses the configuration data from that was sent in the request and starts its own ```Swarm```. 
 
 The master node had the job of parsing a configuration file to find out the IP addresses of the slaves and sending the configuration data to each slave. This had to be done in a multithreaded fashion because we want each slave to be started simultaneously, rather than sequentially. I decided to make the configuration file use YAML rather than JSON because I prefer the readability of YAML.
+
+![alt text](https://raw.githubusercontent.com/satyakb/swarm/master/master-slave.png "Master-Slave")
 
 During the final week, I wanted to implement 2 new features and spend the rest of the time cleaning up what I already implemented. The first feature was to have the slave nodes send their IP addresses to the master node so the user wouldn't have to enter in the IP's themselves. After playing around with the idea, I realized that it would actually be more inconvenient to have the program work this way. This meant the slaves would have to be restarted every run to ensure they connected with the master. However, I was able to figure out how to call C code in Rust to get the IP address of a particular interface. This proved to be useful because when a ```Hyper``` server is listening on 127.0.0.1, it is not listening on all interfaces, only on loopback. This meant the master couldn't actually reach slave nodes that weren't on the local machine. Using the C code, I was able to get the slave nodes to bind to public IP addresses (e.g. en0, eth0, wlan0, etc.).
 
