@@ -16,7 +16,7 @@ The structure of this project is heavily influenced by the goals I had set for m
 
 The main method would parse the options/arguments passed into the program and pass those to a ```Swarm```. The ```Swarm``` would use those arguments to initialize and start a swarm, which involved creating a ```Member``` per request. The job of the ```Member``` was to send the actual request to the intended Host/URL. After all the requests have been sent, the ```Swarm``` also has the job of aggregating all the timing data relevant to each request and developing relevant statistics for the user.
 
-![alt text](https://raw.githubusercontent.com/satyakb/swarm/master/swarm.png "Swarm")
+->![alt text](https://raw.githubusercontent.com/satyakb/swarm/master/swarm.png "Swarm")<-
 
 For the next week, I had the goal of transforming the non-distributed load tester into a distributed one. This involved fitting what I had into a master-slave architecture. The slaves would start a standard HTTP web server using ```Hyper``` and listen for requests from a master node. When a slave receives a request from the master node, it parses the configuration data from that was sent in the request and starts its own ```Swarm```. 
 
