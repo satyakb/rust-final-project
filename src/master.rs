@@ -8,12 +8,11 @@ use std::thread;
 use hyper::Client;
 use hyper::header::Connection;
 use rustc_serialize::json;
-use yaml_rust::YamlLoader;
+use yaml_rust::{Yaml, YamlLoader};
 
-use swarm::{Config, Stats};
+use swarm::{Config, Req, Stats};
 
-/// Starts master, creates a thread per slave, sends command to the slave to
-/// unleash swarm, returns aggregated stats
+/// Starts master, creates a thread per slave, returns aggregated stats
 pub fn start(config_file: String) -> Stats {
 
     // Read Yaml File
@@ -31,10 +30,22 @@ pub fn start(config_file: String) -> Stats {
     let host = docs[0]["host"].as_str().unwrap();
     let num = docs[0]["num"].as_i64().unwrap();
 
+    let seq = docs[0]["sequence"].as_vec().unwrap();
+    let mut seq_parsed = Vec::new();
+    for s in seq {
+        let s = s.as_hash().unwrap();
+        let r = Req {
+            path: s.get(&Yaml::from_str("path")).unwrap().as_str().unwrap().to_string(),
+            method: s.get(&Yaml::from_str("method")).unwrap().as_str().unwrap().to_string(),
+        };
+        seq_parsed.push(r);
+    }
+
     // Parse config file
     let body = Config {
         num: num,
         host: host.to_string(),
+        seq: seq_parsed,
     };
     let body = json::encode(&body).unwrap();
 
@@ -60,7 +71,12 @@ pub fn start(config_file: String) -> Stats {
 
     // Wait for threads to finish
     for thread in threads {
-        thread.join().unwrap();
+        match thread.join() {
+            Ok(_) => (),
+            Err(_) => {
+                println!("Error: unreachable slave");
+            },
+        }
     }
 
     let stats = Arc::try_unwrap(stats).unwrap().into_inner().unwrap();
@@ -98,8 +114,11 @@ fn aggregate_stats(stats: Vec<Stats>) -> Stats {
         ret_stat.max = max(ret_stat.max, stat.max);
         ret_stat.failed += stat.failed;
     }
-    ret_stat.mean /= stats.len() as f64;
-    ret_stat.failed /= stats.len() as f64;
+
+    if stats.len() > 0 {
+        ret_stat.mean /= stats.len() as f64;
+        ret_stat.failed /= stats.len() as f64;
+    }
 
     ret_stat
 }

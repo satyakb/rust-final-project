@@ -4,6 +4,7 @@ extern crate hyper;
 extern crate time;
 extern crate yaml_rust;
 extern crate libc;
+extern crate core;
 
 extern {
     fn get_ip_of_interface(iface: *const libc::c_char) -> *const libc::c_char;
@@ -50,17 +51,16 @@ fn main() {
                             .and_then(|d| d.version(Some(VERSION.to_string())).decode())
                             .unwrap_or_else(|e| e.exit());
 
+    // Get IP address
+    let iface = args.flag_iface.unwrap_or_else(get_default_iface);
+
+    let iface = CString::new(iface.as_str()).unwrap();
+    let c_buf: *const libc::c_char = unsafe { get_ip_of_interface(iface.as_ptr()) };
+    let c_str: &CStr = unsafe { CStr::from_ptr(c_buf) };
+    let buf: &[u8] = c_str.to_bytes();
+    let ip: &str = str::from_utf8(buf).unwrap();
 
     if args.cmd_slave {
-
-        let iface = args.flag_iface.unwrap_or_else(get_default_iface);
-
-        let iface = CString::new(iface.as_str()).unwrap();
-        let c_buf: *const libc::c_char = unsafe { get_ip_of_interface(iface.as_ptr()) };
-        let c_str: &CStr = unsafe { CStr::from_ptr(c_buf) };
-        let buf: &[u8] = c_str.to_bytes();
-        let ip: &str = str::from_utf8(buf).unwrap();
-
         slave::start(ip, args.flag_port);
 
     } else {
@@ -84,6 +84,7 @@ fn main() {
             let config = Config {
                 num: num,
                 host: host,
+                seq: Vec::new(),
             };
             stat = slave::unleash(config);
 

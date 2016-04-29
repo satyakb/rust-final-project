@@ -6,6 +6,17 @@ use time::Duration;
 
 #[derive(Debug, Clone)]
 #[derive(RustcDecodable, RustcEncodable)]
+/// Holds information needed to perform a request
+pub struct Req {
+    /// Path to make request to
+    pub path: String,
+
+    /// HTTP request method
+    pub method: String,
+}
+
+#[derive(Debug, Clone)]
+#[derive(RustcDecodable, RustcEncodable)]
 /// Swarm config
 pub struct Config {
     /// Number of threads to generate/requests to send
@@ -13,6 +24,9 @@ pub struct Config {
 
     /// Min request time in milliseconds
     pub host: String,
+
+    /// Sequence of requests to send
+    pub seq: Vec<Req>,
 }
 
 #[derive(Debug, Clone)]
@@ -41,7 +55,7 @@ pub struct Stats {
 impl Stats {
     pub fn pretty_print(&self) {
         println!("{}\t{}\t{}\t{}\t{}\t{}", "N", "Total", "Mean", "Min", "Max", "%Failed");
-        println!("{}\t{}\t{}\t{}\t{}\t{}", self.num, self.total, self.mean, self.min, self.max, self.failed);
+        println!("{}\t{}\t{:.1}\t{}\t{}\t{}", self.num, self.total, self.mean, self.min, self.max, self.failed);
     }
 }
 
@@ -70,12 +84,10 @@ pub struct Swarm {
 
 impl Swarm {
     /// Instantiates a new swarm with the given settings
-    pub fn new(num: i64, host: &str) -> Swarm {
+    pub fn new(config: Config) -> Swarm {
+        let num = config.num;
         Swarm {
-            config: Config {
-                num: num,
-                host: host.to_string(),
-            },
+            config: config,
             members: Vec::with_capacity(num as usize),
         }
     }
@@ -83,16 +95,20 @@ impl Swarm {
     /// Generates all the necessary threads and sends the requests
     pub fn unleash(&mut self) -> Result<(), ()> {
         let members = Arc::new(Mutex::new(Vec::new()));
+        let seq = Arc::new(Mutex::new(self.config.seq.clone()));
         let mut threads = Vec::new();
 
         for _ in 0..self.config.num {
             let members = members.clone();
             let host = self.config.host.clone();
+            let seq = seq.clone();
+
 
             let thread = thread::spawn(move || {
                 let mut members = members.lock().unwrap();
+                let mut seq = seq.lock().unwrap();
                 let mut m = Member::new();
-                m.send_request(&host);
+                m.send_request(&host, &seq);
                 members.push(m);
 
             });

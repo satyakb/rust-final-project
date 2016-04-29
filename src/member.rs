@@ -1,8 +1,11 @@
+use core::str::FromStr;
 use time::{self, Duration};
 use hyper::{self, Client};
 use hyper::header::Connection;
 use hyper::method::Method;
 use hyper::status::StatusCode;
+
+use swarm::Req;
 
 #[derive(Debug)]
 /// Stores necessary parameters for sending a request
@@ -37,18 +40,25 @@ impl Member {
     }
 
     /// Sends the request, returns the time taken
-    pub fn send_request(&mut self, host: &str) -> () {
+    pub fn send_request(&mut self, host: &str, seq: &Vec<Req>) -> () {
         // Save starting time
         let start = time::get_time();
 
-        let method = Method::Get;
+        let mut res = self.client.request(Method::Get, host)
+                .header(Connection::close())
+                .send();
+
+        println!("{:?}", seq);
 
         // Creating an outgoing request.
-        let res = self.client.request(method, host)
-            // set a header
-            .header(Connection::close())
-            // let 'er go!
-            .send();
+        for req in seq {
+            let url = host.to_string() + req.path.as_str();
+            res = self.client.request(Method::from_str(&req.method).unwrap(), &url)
+                // set a header
+                .header(Connection::close())
+                // let 'er go!
+                .send();
+        }
 
         // Save ending time
         let end = time::get_time();
