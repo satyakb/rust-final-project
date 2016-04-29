@@ -106,7 +106,7 @@ impl Swarm {
 
             let thread = thread::spawn(move || {
                 let mut members = members.lock().unwrap();
-                let mut seq = seq.lock().unwrap();
+                let seq = seq.lock().unwrap();
                 let mut m = Member::new();
                 m.send_request(&host, &seq);
                 members.push(m);

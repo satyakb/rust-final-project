@@ -24,13 +24,14 @@ pub fn start(config_file: String) -> Stats {
 
     // Set up threading stuff
     let mut threads = Vec::new();
-    let mut stats = Arc::new(Mutex::new(Vec::new()));
+    let stats = Arc::new(Mutex::new(Vec::new()));
     let count = docs[0]["slaves"].as_vec().unwrap().len();
 
     let host = docs[0]["host"].as_str().unwrap();
     let num = docs[0]["num"].as_i64().unwrap();
 
-    let seq = docs[0]["sequence"].as_vec().unwrap();
+    let tmp = Vec::new();
+    let seq = docs[0]["sequence"].as_vec().unwrap_or(&tmp);
     let mut seq_parsed = Vec::new();
     for s in seq {
         let s = s.as_hash().unwrap();
@@ -51,7 +52,7 @@ pub fn start(config_file: String) -> Stats {
 
     // Create threads
     for i in 0..count {
-        let mut stats = stats.clone();
+        let stats = stats.clone();
         let body = body.clone();
         let docs = docs.clone();
 

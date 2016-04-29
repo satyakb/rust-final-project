@@ -21,7 +21,7 @@ pub mod swarm;
 mod slave;
 
 use constants::{USAGE, VERSION};
-use swarm::{Config, Stats};
+use swarm::Config;
 
 #[derive(Debug, RustcDecodable)]
 /// Stores commandline arguments
@@ -65,7 +65,7 @@ fn main() {
 
     } else {
 
-        let mut stat : Stats = Default::default();
+        let stat;
 
         if args.cmd_master {
             let config_file = args.arg_cfg.unwrap();

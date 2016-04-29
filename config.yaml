@@ -3,9 +3,9 @@ host:
 
 sequence:
   - path: /flights
-    method: POST
-  - path: /images
     method: GET
+  - path: /images
+    method: POST
 
 num:
   10

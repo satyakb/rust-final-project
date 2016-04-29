@@ -48,8 +48,6 @@ impl Member {
                 .header(Connection::close())
                 .send();
 
-        println!("{:?}", seq);
-
         // Creating an outgoing request.
         for req in seq {
             let url = host.to_string() + req.path.as_str();
