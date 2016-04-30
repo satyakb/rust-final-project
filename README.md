@@ -22,7 +22,8 @@ Options:
   -V, --version             Show version.
 ```
 
-Note: configuration goes in YAML file, see `config.yaml` for an example
+Note: Configuration for master goes in YAML file, see `config.yaml` for an example
+Sequence is an optional entry in the config, the root host url is load tested regardless.
 
 ## Approximate time spent
 
