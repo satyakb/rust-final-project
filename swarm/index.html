@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `swarm` crate.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, swarm">
+
+    <title>swarm - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'></p><script>window.sidebarCurrent = {name: 'swarm', ty: 'mod', relpath: '../'};</script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>swarm</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-0' class='srclink' href='../src/swarm/main.rs.html#1-95' title='goto source code'>[src]</a></span></h1>
+<h2 id='reexports' class='section-header'><a href="#reexports">Reexports</a></h2>
+<table><tr><td><code>extern crate std as std;</code></td></tr><tr><td><code>extern crate rustc_serialize;</code></td></tr><tr><td><code>extern crate docopt;</code></td></tr><tr><td><code>extern crate hyper;</code></td></tr><tr><td><code>extern crate time;</code></td></tr><tr><td><code>extern crate yaml_rust;</code></td></tr><tr><td><code>extern crate libc;</code></td></tr><tr><td><code>extern crate core;</code></td></tr><tr><td><code>use std::prelude::<a class='mod' href='https://doc.rust-lang.org/nightly/std/prelude/v1/index.html' title='std::prelude::v1'>v1</a>::*;</code></td></tr><tr><td><code>use std::ffi::{<a class='struct' href='https://doc.rust-lang.org/nightly/std/ffi/c_str/struct.CStr.html' title='std::ffi::c_str::CStr'>CStr</a>, <a class='struct' href='https://doc.rust-lang.org/nightly/std/ffi/c_str/struct.CString.html' title='std::ffi::c_str::CString'>CString</a>};</code></td></tr><tr><td><code>use std::<a class='mod' href='https://doc.rust-lang.org/nightly/collections/str/index.html' title='collections::str'>str</a>;</code></td></tr><tr><td><code>use docopt::<a class='struct' href='http://burntsushi.net/rustdoc/docopt/docopt/dopt/struct.Docopt.html' title='docopt::dopt::Docopt'>Docopt</a>;</code></td></tr><tr><td><code>use constants::{USAGE, VERSION};</code></td></tr><tr><td><code>use swarm::<a class='struct' href='../swarm/swarm/struct.Config.html' title='swarm::swarm::Config'>Config</a>;</code></td></tr></table><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='mod' href='constants/index.html'
+                               title='swarm::constants'>constants</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='mod' href='master/index.html'
+                               title='swarm::master'>master</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='mod' href='member/index.html'
+                               title='swarm::member'>member</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='mod' href='slave/index.html'
+                               title='swarm::slave'>slave</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='mod' href='swarm/index.html'
+                               title='swarm::swarm'>swarm</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                </table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.Args.html'
+                               title='swarm::Args'>Args</a></td>
+                        <td class='docblock short'>
+                             <p>Stores commandline arguments</p>
+
+                        </td>
+                    </tr>
+                </table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.get_default_iface.html'
+                               title='swarm::get_default_iface'>get_default_iface</a></td>
+                        <td class='docblock short'>
+                             <p>Naively gets default internet interface based on OS</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.get_ip_of_interface.html'
+                               title='swarm::get_ip_of_interface'>get_ip_of_interface</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.main.html'
+                               title='swarm::main'>main</a></td>
+                        <td class='docblock short'>
+                             <p>Parses commandline arguments</p>
+
+                        </td>
+                    </tr>
+                </table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "swarm";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script defer src="../search-index.js"></script>
+</body>
+</html>

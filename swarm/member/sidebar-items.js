@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Member","Stores necessary parameters for sending a request"]]});

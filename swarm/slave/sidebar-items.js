@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["req_handler","Handles request from master and unleashes swarm"],["start","Starts http server listening for requests from the master"],["unleash","Unleashes the swarm from local machine"]]});
