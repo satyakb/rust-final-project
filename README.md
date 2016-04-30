@@ -101,7 +101,7 @@ The base functionality of the project went extremely well. Creating a simple dis
 
 ### What I would do differently
 
-If I had more time I would love to be able to add more advanced features to the load tester. One of the main reasons I picked this project was the potential of taking this above and beyond. I would like to create a GUI that would make the program even easier to use. I would like to add more advanced request options that allow the program to do even more complicated sequences.
+If I had more time I would love to be able to add more advanced features to the load tester. One of the main reasons I picked this project was the potential of taking this above and beyond. I would like to create a GUI that would make the program even easier to use. I would like to add more advanced request options that allow the program to do even more complicated sequences. Looking at programs such as Apache Bench, you can see the potential for this project and how advanced it can actually become.
 
 One thing I would change about my current implementation is the general naming scheme. I'm happy with the name Swarm but it is a little ambiguous. That is, Swarm could refer to the requests the program sends or all of the slave nodes that the master is controlling. This is something I didn't have the foresight to see when working on the week 1 goal of a non-distributed load tester.
 

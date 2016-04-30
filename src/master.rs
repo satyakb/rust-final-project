@@ -12,7 +12,7 @@ use yaml_rust::{Yaml, YamlLoader};
 
 use swarm::{Config, Req, Stats};
 
-/// Starts master, creates a thread per slave, returns aggregated stats
+/// Starts master, parses config file, creates a thread per slave, returns aggregated stats
 pub fn start(config_file: String) -> Stats {
 
     // Read Yaml File
