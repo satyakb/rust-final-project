@@ -12,6 +12,12 @@ Swarm is an implementation of a distributed HTTP load tester in Rust.
 
 I was able to successfully create a distributed HTTP load tester in Rust. I made heavy use of concurrency in this project, something Rust is known for being good at in order to ensure the program is very efficient and quick.
 
+The program takes has configurable options such as:
+- Host (master)
+- Number of requests (master)
+- Port (slave)
+- Interface (slave)
+
 ## Components, structure, design decisions
 
 The structure of this project is heavily influenced by the goals I had set for myself every week. The first week, I had set out to simply create a non-distributed load tester. The architecture of the system was fairly straightforward at this point. There were 3 main components: the main method, a Swarm, and a Member. 
