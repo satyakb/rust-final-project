@@ -48,7 +48,7 @@ Here's a comparison of running Swarm at various concurrency levels:
 ➜  swarm git:(master) ✗ time cargo run --release -- unleash -n 100 -c 1 http://google.com/
      Running `target/release/swarm unleash -n 100 -c 1 http://google.com/`
 Swarm { config: Config { num: 100, clevel: 1, host: "http://google.com/", seq: [] }, members: [] }
-N:      100
+N:          100
 Total:      47.616sec
 Mean:       476.16ms
 Min:        268ms
@@ -58,7 +58,7 @@ cargo run --release -- unleash -n 100 -c 1 http://google.com/  0.37s user 0.29s 
 ➜  swarm git:(master) ✗ time cargo run --release -- unleash -n 100 -c 10 http://google.com/
      Running `target/release/swarm unleash -n 100 -c 10 http://google.com/`
 Swarm { config: Config { num: 100, clevel: 10, host: "http://google.com/", seq: [] }, members: [] }
-N:      100
+N:          100
 Total:      43.682sec
 Mean:       436.82ms
 Min:        261ms
@@ -68,7 +68,7 @@ cargo run --release -- unleash -n 100 -c 10 http://google.com/  0.37s user 0.29s
 ➜  swarm git:(master) ✗ time cargo run --release -- unleash -n 100 -c 100 http://google.com/
      Running `target/release/swarm unleash -n 100 -c 100 http://google.com/`
 Swarm { config: Config { num: 100, clevel: 100, host: "http://google.com/", seq: [] }, members: [] }
-N:      100
+N:          100
 Total:      47.802sec
 Mean:       478.02ms
 Min:        298ms
