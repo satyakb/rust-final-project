@@ -36,16 +36,12 @@ To benchmark `Swarm`, I compared its output and execution time to that of Apache
 
 ### Swarm 
 
-N | Total | Mean  |  Min | Max | %Failed
---- | --- | --- | --- | --- | ---
-1000  |  1004308 | 1004.3 |  607 | 1604 |   0
 ```
-N   Total   Mean    Min Max %Failed
-1000    1766872 1766.9  928 3956    0
+N       Total       Mean    Min     Max     %Failed
+1000    1766872     1766.9  928     3956    0
+```
+```
 cargo run --release -- unleash -n 1000 http://google.com/  0.82s user 2.82s system 79% cpu 4.556 total
-```
-```
-cargo run -- master config.yaml  0.60s user 0.21s system 30% cpu 2.635 total
 ```
 
 ### Apache Bench
