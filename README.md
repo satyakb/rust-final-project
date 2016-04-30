@@ -32,7 +32,9 @@ The second feature was to create the ability to test a sequence of requests rath
 
 ## Benchmarks
 
-To benchmark `Swarm`, I compared its output and execution time to that of Apache Bench. 
+To benchmark `Swarm`, I compared its output and execution time to that of Apache Bench.
+
+### Swarm 
 
 N | Total | Mean  |  Min | Max | %Failed
 --- | --- | --- | --- | --- | ---
@@ -41,10 +43,39 @@ N | Total | Mean  |  Min | Max | %Failed
 cargo run -- master config.yaml  0.60s user 0.21s system 30% cpu 2.635 total
 ```
 
+### Apache Bench
+
 ```bash
-N   Total   Mean    Min Max %Failed
-1000    1004308 1004.3  607 1604    0
-cargo run -- master config.yaml  0.60s user 0.21s system 30% cpu 2.635 total
+Concurrency Level:      1000
+Time taken for tests:   1.995 seconds
+Complete requests:      1000
+Failed requests:        0
+Non-2xx responses:      1000
+Total transferred:      540000 bytes
+HTML transferred:       219000 bytes
+Requests per second:    501.33 [#/sec] (mean)
+Time per request:       1994.713 [ms] (mean)
+Time per request:       1.995 [ms] (mean, across all concurrent requests)
+Transfer rate:          264.37 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:       20  117 118.3     75     384
+Processing:    49  497 375.3    690    1850
+Waiting:       48  493 376.7    690    1836
+Total:         89  614 418.1    741    1979
+
+Percentage of the requests served within a certain time (ms)
+  50%    741
+  66%    869
+  75%    928
+  80%    966
+  90%   1278
+  95%   1330
+  98%   1340
+  99%   1343
+ 100%   1979 (longest request)
+ab -n 1000 -c 1000 http://google.com/  0.03s user 0.09s system 5% cpu 2.039 total
 ```
 
 ## Limitations
