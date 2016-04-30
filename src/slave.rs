@@ -64,6 +64,5 @@ pub fn unleash(config: Config) -> Stats {
     let mut swarm = Swarm::new(config);
     println!("{:?}", swarm);
     swarm.unleash().unwrap();
-    swarm.stats().pretty_print();
     swarm.stats()
 }

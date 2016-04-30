@@ -1,5 +1,5 @@
-use std::sync::{Arc, Mutex};
 use std::thread;
+use std::sync::mpsc::channel;
 use std::cmp::{min, max};
 use member::Member;
 use time::Duration;
@@ -85,41 +85,39 @@ pub struct Swarm {
 impl Swarm {
     /// Instantiates a new swarm with the given settings
     pub fn new(config: Config) -> Swarm {
-        let num = config.num;
         Swarm {
             config: config,
-            members: Vec::with_capacity(num as usize),
+            members: Vec::new(),
         }
     }
 
     /// Generates all the necessary threads and sends the requests
     pub fn unleash(&mut self) -> Result<(), ()> {
-        let members = Arc::new(Mutex::new(Vec::new()));
-        let seq = Arc::new(Mutex::new(self.config.seq.clone()));
         let mut threads = Vec::new();
 
-        for _ in 0..self.config.num {
-            let members = members.clone();
-            let host = self.config.host.clone();
-            let seq = seq.clone();
+        let (tx, rx) = channel();
 
+        for _ in 0..self.config.num {
+            let host = self.config.host.clone();
+            let seq = self.config.seq.clone();
+
+            let tx = tx.clone();
 
             let thread = thread::spawn(move || {
-                let mut members = members.lock().unwrap();
-                let seq = seq.lock().unwrap();
                 let mut m = Member::new();
                 m.send_request(&host, &seq);
-                members.push(m);
-
+                tx.send(m).unwrap();
             });
             threads.push(thread);
         }
+        drop(tx);
 
-        for thread in threads {
-            thread.join().unwrap();
+        let mut members = Vec::new();
+        while let Ok(m) = rx.recv() {
+            members.push(m);
         }
 
-        self.members = Arc::try_unwrap(members).unwrap().into_inner().unwrap();
+        self.members = members;
         Ok(())
     }
 

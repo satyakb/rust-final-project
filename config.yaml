@@ -1,14 +1,8 @@
 host:
   http://google.com
 
-sequence:
-  - path: /flights
-    method: GET
-  - path: /images
-    method: POST
-
 num:
-  10
+  1000
 
 slaves:
   - 10.180.220.90:3000
