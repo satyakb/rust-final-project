@@ -37,7 +37,9 @@ To benchmark `Swarm`, I compared its output and execution time to that of Apache
 N | Total | Mean  |  Min | Max | %Failed
 --- | --- | --- | --- | --- | ---
 1000  |  1004308 | 1004.3 |  607 | 1604 |   0
+```
 cargo run -- master config.yaml  0.60s user 0.21s system 30% cpu 2.635 total
+```
 
 ```bash
 N   Total   Mean    Min Max %Failed
