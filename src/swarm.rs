@@ -19,8 +19,11 @@ pub struct Req {
 #[derive(RustcDecodable, RustcEncodable)]
 /// Swarm config
 pub struct Config {
-    /// Number of threads to generate/requests to send
+    /// Number of requests to send
     pub num: i64,
+
+    /// Concurrency level, number of threads to create
+    pub clevel: i64,
 
     /// Min request time in milliseconds
     pub host: String,
@@ -107,16 +110,19 @@ impl Swarm {
 
         let (tx, rx) = channel();
 
-        for _ in 0..self.config.num {
+        let n = self.config.num / self.config.clevel;
+        for _ in 0..self.config.clevel {
             let host = self.config.host.clone();
             let seq = self.config.seq.clone();
 
             let tx = tx.clone();
 
             let thread = thread::spawn(move || {
-                let mut m = Member::new();
-                m.send_request(&host, &seq);
-                tx.send(m).unwrap();
+                for _ in 0..n {
+                    let mut m = Member::new();
+                    m.send_request(&host, &seq);
+                    tx.send(m).unwrap();
+                }
             });
             threads.push(thread);
         }

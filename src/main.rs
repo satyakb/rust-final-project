@@ -27,6 +27,7 @@ use swarm::Config;
 /// Stores commandline arguments
 struct Args {
     flag_num: i64,
+    flag_clevel: i64,
     flag_port: i64,
     flag_iface: Option<String>,
     arg_cfg: Option<String>,
@@ -75,6 +76,7 @@ fn main() {
 
             let host = args.arg_host.unwrap();
             let num = args.flag_num;
+            let clevel = args.flag_clevel;
 
             if num < 1 {
                 println!("Error: please choose a number greater than 0");
@@ -83,6 +85,7 @@ fn main() {
 
             let config = Config {
                 num: num,
+                clevel: clevel,
                 host: host,
                 seq: Vec::new(),
             };

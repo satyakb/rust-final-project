@@ -42,6 +42,41 @@ Due to the nature of this project (mostly just making web requests and dealing w
 
 The program itself works essentially as expected. There were no big surprises throughout the process of making the program, however a lot of thought was put in to ensure that surprises wouldn't come up.
 
+Here's a comparison of running Swarm at various concurrency levels:
+
+```
+➜  swarm git:(master) ✗ time cargo run --release -- unleash -n 100 -c 1 http://google.com/
+     Running `target/release/swarm unleash -n 100 -c 1 http://google.com/`
+Swarm { config: Config { num: 100, clevel: 1, host: "http://google.com/", seq: [] }, members: [] }
+N:      100
+Total:      47.616sec
+Mean:       476.16ms
+Min:        268ms
+Max:        1334ms
+%Fail:      0
+cargo run --release -- unleash -n 100 -c 1 http://google.com/  0.37s user 0.29s system 1% cpu 48.220 total
+➜  swarm git:(master) ✗ time cargo run --release -- unleash -n 100 -c 10 http://google.com/
+     Running `target/release/swarm unleash -n 100 -c 10 http://google.com/`
+Swarm { config: Config { num: 100, clevel: 10, host: "http://google.com/", seq: [] }, members: [] }
+N:      100
+Total:      43.682sec
+Mean:       436.82ms
+Min:        261ms
+Max:        599ms
+%Fail:      0
+cargo run --release -- unleash -n 100 -c 10 http://google.com/  0.37s user 0.29s system 12% cpu 5.332 total
+➜  swarm git:(master) ✗ time cargo run --release -- unleash -n 100 -c 100 http://google.com/
+     Running `target/release/swarm unleash -n 100 -c 100 http://google.com/`
+Swarm { config: Config { num: 100, clevel: 100, host: "http://google.com/", seq: [] }, members: [] }
+N:      100
+Total:      47.802sec
+Mean:       478.02ms
+Min:        298ms
+Max:        626ms
+%Fail:      0
+cargo run --release -- unleash -n 100 -c 100 http://google.com/  0.37s user 0.35s system 60% cpu 1.199 total
+```
+
 ## Benchmarks
 
 To benchmark Swarm, I compared its output and execution time to that of Apache Bench. Apache Bench has many more features/options than Swarm, but I tried to set it up so that it was most similar in behavior with Swarm.

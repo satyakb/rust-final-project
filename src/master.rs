@@ -29,6 +29,7 @@ pub fn start(config_file: String) -> Stats {
 
     let host = docs[0]["host"].as_str().unwrap();
     let num = docs[0]["num"].as_i64().unwrap();
+    let clevel = docs[0]["concurrency"].as_i64().unwrap();
 
     let tmp = Vec::new();
     let seq = docs[0]["sequence"].as_vec().unwrap_or(&tmp);
@@ -45,6 +46,7 @@ pub fn start(config_file: String) -> Stats {
     // Parse config file
     let body = Config {
         num: num,
+        clevel: clevel,
         host: host.to_string(),
         seq: seq_parsed,
     };
