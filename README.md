@@ -75,6 +75,8 @@ Percentage of the requests served within a certain time (ms)
   98%   1340
   99%   1343
  100%   1979 (longest request)
+```
+```
 ab -n 1000 -c 1000 http://google.com/  0.03s user 0.09s system 5% cpu 2.039 total
 ```
 
