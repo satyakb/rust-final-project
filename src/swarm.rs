@@ -37,7 +37,7 @@ pub struct Stats {
     pub num: i64,
 
     /// Total time taken for all requests in milliseconds
-    pub total: i64,
+    pub total: f64,
 
     /// Mean request time in milliseconds
     pub mean: f64,
@@ -54,8 +54,18 @@ pub struct Stats {
 
 impl Stats {
     pub fn pretty_print(&self) {
-        println!("{}\t{}\t{}\t{}\t{}\t{}", "N", "Total", "Mean", "Min", "Max", "%Failed");
-        println!("{}\t{}\t{:.1}\t{}\t{}\t{}", self.num, self.total, self.mean, self.min, self.max, self.failed);
+        println!("{}:\t\t{}\r\n\
+                {}:\t\t{}sec\r\n\
+                {}:\t\t{}ms\r\n\
+                {}:\t\t{}ms\r\n\
+                {}:\t\t{}ms\r\n\
+                {}:\t\t{}",
+                "N", self.num,
+                "Total", self.total,
+                "Mean", self.mean,
+                "Min", self.min,
+                "Max", self.max,
+                "%Fail", self.failed);
     }
 }
 
@@ -63,7 +73,7 @@ impl Default for Stats {
     fn default() -> Stats {
         Stats {
             num: 0,
-            total: 0,
+            total: 0.0,
             mean: 0.0,
             min: i64::max_value(),
             max: i64::min_value(),
@@ -139,7 +149,7 @@ impl Swarm {
 
         Stats {
             num: self.config.num,
-            total: sum,
+            total: sum as f64 / 1000.0,
             mean: sum as f64 / self.config.num as f64,
             min: min_d.num_milliseconds(),
             max: max_d.num_milliseconds(),
